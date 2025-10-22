@@ -8,8 +8,8 @@
 - 比較先ブランチ名・保存先フォルダは設定に記憶され、次回以降自動入力
 
 ## 設定項目
-- `codeDiffReviewer.saveDirectory`: 差分ファイルの保存先フォルダ
-- `codeDiffReviewer.lastCompareBranch`: 前回比較したブランチ名
+- `copilotReviewPromptEditor.saveDirectory`: 差分ファイルの保存先フォルダ
+- `copilotReviewPromptEditor.lastCompareBranch`: 前回比較したブランチ名
 
 ## 使い方
 1. コマンドパレット（Ctrl+Shift+P）で「Save Git Diff Files」を実行
