@@ -333,18 +333,6 @@ async function saveDiffFile() {
 
     let branch = lastCompareBranch;
     if (!branch) {
-        // 1. ブランチ名入力（前回値をデフォルトに）
-        const input = await vscode.window.showInputBox({
-            prompt: 'マージしたいブランチ名を入力してください（空欄で現在ブランチ全体レビュー）',
-            placeHolder: 'feature/branch-name',
-            value: lastCompareBranch
-        });
-
-        if (input) {
-            branch = input;
-        }
-    }
-    if (!branch) {
         // 空欄なら全体レビュー用プロンプトコピーのみ実行
         await copyReviewPromptNoDiff();
         return;
