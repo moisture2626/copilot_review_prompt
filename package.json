@@ -1,0 +1,104 @@
+{
+    "name": "code-diff-reviewer",
+    "displayName": "Code Diff Reviewer",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.104.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "codeDiffReviewerContainer",
+                    "title": "Code Diff Reviewer",
+                    "icon": "$(diff)"
+                }
+            ]
+        },
+        "views": {
+            "codeDiffReviewerContainer": [
+                {
+                    "id": "codeDiffReviewerView",
+                    "name": "プロンプト編集",
+                    "type": "webview",
+                    "icon": "$(edit)"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "code-diff-reviewer.helloWorld",
+                "title": "Hello World"
+            },
+            {
+                "command": "code-diff-reviewer.saveDiffFiles",
+                "title": "Save Git Diff Files"
+            },
+            {
+                "command": "code-diff-reviewer.copyDiffReviewPrompt",
+                "title": "Copy Diff Review Prompt"
+            },
+            {
+                "command": "code-diff-reviewer.copyReviewPrompt",
+                "title": "Copy Review Prompt (No Diff)"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Code Diff Reviewer",
+            "properties": {
+                "codeDiffReviewer.saveDirectory": {
+                    "type": "string",
+                    "default": "",
+                    "description": "差分ファイルの保存先フォルダのパス"
+                },
+                "codeDiffReviewer.lastCompareBranch": {
+                    "type": "string",
+                    "default": "",
+                    "description": "前回比較したブランチ名"
+                },
+                "codeDiffReviewer.reviewPrompt": {
+                    "type": "string",
+                    "format": "textarea",
+                    "default": "以下の条件でgit diffパッチファイルをもとにコードレビューをしてください。\n・diffの読み込みはコマンドラインを自由に使用してください。\n・diffファイルに記載されている.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・関連するクラスもすべて検索して総合的にレビューしてください。\n・明確なバグやエラーを最優先、多少の冗長さやコードの無駄は無視してください。\n\n[ファイルパス] {filePath}",
+                    "description": "Diffレビュー用プロンプト文。{filePath}はファイルパスに置換されます。"
+                },
+                "codeDiffReviewer.reviewPromptNoDiff": {
+                    "type": "string",
+                    "format": "textarea",
+                    "default": "以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・明確なバグやエラーを最優先、多少の冗長さやコードの無駄は無視してください。",
+                    "description": "diffを使わない場合のレビュー用プロンプト文。"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src",
+        "test": "vscode-test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://example.com/your-repo.git"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.104.0",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "22.x",
+        "@typescript-eslint/eslint-plugin": "^8.42.0",
+        "@typescript-eslint/parser": "^8.42.0",
+        "eslint": "^9.34.0",
+        "typescript": "^5.9.2",
+        "@vscode/test-cli": "^0.0.11",
+        "@vscode/test-electron": "^2.5.2"
+    }
+}
