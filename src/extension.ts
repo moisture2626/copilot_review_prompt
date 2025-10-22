@@ -458,7 +458,7 @@ async function copyReviewPromptNoDiff() {
     const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
     let promptTemplate: string = config.get('reviewPromptNoDiff') || '';
     if (!promptTemplate) {
-        promptTemplate = `以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・関連するクラスもすべて検索して設計の観点から総合的にレビューしてください。\n・明確なバグやエラーがあれば優先して指摘、多少の冗長さやコードの無駄は無視してください。`;
+        promptTemplate = `以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・レビューは設計面を重視、明確なバグやエラーを優先して指摘、多少の冗長さやコードの無駄は無視してください。`;
     }
     await vscode.env.clipboard.writeText(promptTemplate);
     vscode.window.showInformationMessage('Copilotチャット入力欄を開いて貼り付けてください。\nプロンプトはクリップボードにコピーされました。');
