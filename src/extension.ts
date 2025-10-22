@@ -7,7 +7,7 @@ import { exec } from 'child_process';
 
 // プロンプト編集用のWebViewProvider
 class PromptEditorViewProvider implements vscode.WebviewViewProvider {
-    public static readonly viewType = 'codeDiffReviewerView';
+    public static readonly viewType = 'copilotReviewPromptEditorView';
     private _view?: vscode.WebviewView;
 
     constructor(private readonly _extensionUri: vscode.Uri) { }
@@ -28,7 +28,7 @@ class PromptEditorViewProvider implements vscode.WebviewViewProvider {
 
         // メッセージ受信（保存処理）
         webviewView.webview.onDidReceiveMessage(async data => {
-            const config = vscode.workspace.getConfiguration('codeDiffReviewer');
+            const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
             switch (data.type) {
                 case 'save':
                     await config.update('reviewPrompt', data.reviewPrompt, vscode.ConfigurationTarget.Global);
@@ -39,16 +39,16 @@ class PromptEditorViewProvider implements vscode.WebviewViewProvider {
                     break;
                 case 'copyDiffPrompt':
                     await config.update('reviewPromptNoDiff', data.prompt, vscode.ConfigurationTarget.Global);
-                    await vscode.commands.executeCommand('code-diff-reviewer.copyDiffReviewPrompt');
+                    await vscode.commands.executeCommand('copilot-review-prompt-editor.copyDiffReviewPrompt');
                     break;
 
                 case 'copyNoDiffPrompt':
                     await config.update('reviewPrompt', data.prompt, vscode.ConfigurationTarget.Global);
-                    await vscode.commands.executeCommand('code-diff-reviewer.copyReviewPrompt');
+                    await vscode.commands.executeCommand('copilot-review-prompt-editor.copyReviewPrompt');
                     break;
                 case 'saveDiff':
                     // 差分を保存する処理を実行
-                    await vscode.commands.executeCommand('code-diff-reviewer.saveDiffFiles');
+                    await vscode.commands.executeCommand('copilot-review-prompt-editor.saveDiffFiles');
                     break;
                 case 'browseSaveDirectory':
                     // フォルダ選択ダイアログを開く
@@ -72,7 +72,7 @@ class PromptEditorViewProvider implements vscode.WebviewViewProvider {
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
-        const config = vscode.workspace.getConfiguration('codeDiffReviewer');
+        const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
         const reviewPrompt = config.get('reviewPrompt') || '';
         const reviewPromptNoDiff = config.get('reviewPromptNoDiff') || '';
         const lastCompareBranch = config.get('lastCompareBranch') || '';
@@ -286,16 +286,16 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(PromptEditorViewProvider.viewType, provider)
     );
 
-    console.log('Congratulations, your extension "code-diff-reviewer" is now active!');
+    console.log('Congratulations, your extension "copilot-review-prompt-editor" is now active!');
 
     // Save Git Diff Files command
-    const saveDiffDisposable = vscode.commands.registerCommand('code-diff-reviewer.saveDiffFiles', async () => {
+    const saveDiffDisposable = vscode.commands.registerCommand('copilot-review-prompt-editor.saveDiffFiles', async () => {
         saveDiffFile();
     });
     context.subscriptions.push(saveDiffDisposable);
 
     // Diffレビュー用プロンプトをクリップボードにコピーするコマンド（diffファイル指定）
-    const copyDiffPromptDisposable = vscode.commands.registerCommand('code-diff-reviewer.copyDiffReviewPrompt', async () => {
+    const copyDiffPromptDisposable = vscode.commands.registerCommand('copilot-review-prompt-editor.copyDiffReviewPrompt', async () => {
         // 差分ファイル選択
         const files = await vscode.window.showOpenDialog({
             canSelectMany: false,
@@ -314,7 +314,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(copyDiffPromptDisposable);
 
     // Diffなしプロンプトをchat入力欄にコピーするコマンド
-    const copyPromptDisposable = vscode.commands.registerCommand('code-diff-reviewer.copyReviewPrompt', async () => {
+    const copyPromptDisposable = vscode.commands.registerCommand('copilot-review-prompt-editor.copyReviewPrompt', async () => {
         await copyReviewPromptNoDiff();
     });
     context.subscriptions.push(copyPromptDisposable);
@@ -328,7 +328,7 @@ export function deactivate() { }
 ///
 async function saveDiffFile() {
     // 設定取得
-    const config = vscode.workspace.getConfiguration('codeDiffReviewer');
+    const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
     const lastCompareBranch: string = config.get('lastCompareBranch') || '';
 
     let branch = lastCompareBranch;
@@ -432,7 +432,7 @@ async function saveDiffFile() {
 ///
 async function copyReviewPrompt(filePath: string) {
     // 設定からプロンプト文取得
-    const config = vscode.workspace.getConfiguration('codeDiffReviewer');
+    const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
     let promptTemplate: string = config.get('reviewPrompt') || '';
     if (!promptTemplate) {
         promptTemplate = `以下の条件でgit diffパッチファイルをもとにコードレビューをしてください。\n
@@ -455,10 +455,10 @@ async function copyReviewPrompt(filePath: string) {
 ///
 async function copyReviewPromptNoDiff() {
     // 設定からプロンプト文取得
-    const config = vscode.workspace.getConfiguration('codeDiffReviewer');
+    const config = vscode.workspace.getConfiguration('copilotReviewPromptEditor');
     let promptTemplate: string = config.get('reviewPromptNoDiff') || '';
     if (!promptTemplate) {
-        promptTemplate = `以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・関連するクラスもすべて検索して設計の観点から総合的にレビューしてください。\n・明確なバグやエラーがあれば優先して指摘、多少の冗長さやコードの無駄は無視してください。`;
+        promptTemplate = `以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・レビューは設計面を重視、明確なバグやエラーを優先して指摘、多少の冗長さやコードの無駄は無視してください。`;
     }
     await vscode.env.clipboard.writeText(promptTemplate);
     vscode.window.showInformationMessage('Copilotチャット入力欄を開いて貼り付けてください。\nプロンプトはクリップボードにコピーされました。');

@@ -1,6 +1,6 @@
 {
-    "name": "code-diff-reviewer",
-    "displayName": "Code Diff Reviewer",
+    "name": "copilot-review-prompt-editor",
+    "displayName": "Copilot Review Prompt Editor",
     "description": "",
     "version": "0.0.1",
     "engines": {
@@ -15,16 +15,16 @@
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "codeDiffReviewerContainer",
-                    "title": "Code Diff Reviewer",
+                    "id": "copilotReviewPromptEditorContainer",
+                    "title": "Copilot Review Prompt Editor",
                     "icon": "$(diff)"
                 }
             ]
         },
         "views": {
-            "codeDiffReviewerContainer": [
+            "copilotReviewPromptEditorContainer": [
                 {
-                    "id": "codeDiffReviewerView",
+                    "id": "copilotReviewPromptEditorView",
                     "name": "プロンプト編集",
                     "type": "webview",
                     "icon": "$(edit)"
@@ -33,46 +33,46 @@
         },
         "commands": [
             {
-                "command": "code-diff-reviewer.helloWorld",
+                "command": "copilot-review-prompt-editor.helloWorld",
                 "title": "Hello World"
             },
             {
-                "command": "code-diff-reviewer.saveDiffFiles",
+                "command": "copilot-review-prompt-editor.saveDiffFiles",
                 "title": "Save Git Diff Files"
             },
             {
-                "command": "code-diff-reviewer.copyDiffReviewPrompt",
+                "command": "copilot-review-prompt-editor.copyDiffReviewPrompt",
                 "title": "Copy Diff Review Prompt"
             },
             {
-                "command": "code-diff-reviewer.copyReviewPrompt",
+                "command": "copilot-review-prompt-editor.copyReviewPrompt",
                 "title": "Copy Review Prompt (No Diff)"
             }
         ],
         "configuration": {
             "type": "object",
-            "title": "Code Diff Reviewer",
+            "title": "Copilot Review Prompt Editor",
             "properties": {
-                "codeDiffReviewer.saveDirectory": {
+                "copilotReviewPromptEditor.saveDirectory": {
                     "type": "string",
                     "default": "",
                     "description": "差分ファイルの保存先フォルダのパス"
                 },
-                "codeDiffReviewer.lastCompareBranch": {
+                "copilotReviewPromptEditor.lastCompareBranch": {
                     "type": "string",
                     "default": "",
                     "description": "前回比較したブランチ名"
                 },
-                "codeDiffReviewer.reviewPrompt": {
+                "copilotReviewPromptEditor.reviewPrompt": {
                     "type": "string",
                     "format": "textarea",
-                    "default": "以下の条件でgit diffパッチファイルをもとにコードレビューをしてください。\n・diffの読み込みはコマンドラインを自由に使用してください。\n・diffファイルに記載されている.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・関連するクラスもすべて検索して総合的にレビューしてください。\n・明確なバグやエラーを最優先、多少の冗長さやコードの無駄は無視してください。\n\n[ファイルパス] {filePath}",
-                    "description": "Diffレビュー用プロンプト文。{filePath}はファイルパスに置換されます。"
+                    "default": "以下の条件でgit diffパッチファイルをもとにコードレビューをしてください。\n・diffパッチファイルの読み込みはコマンドラインを自由に使用してください。\n・diffパッチファイルに記載されている.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・関連するクラスもすべて検索して総合的にレビューしてください。\n・レビューは設計面を重視、明確なバグやエラーを優先して指摘、多少の冗長さやコードの無駄は無視してください。\n・レビューはMarkDown形式で表示してください。\n\n[ファイルパス] {filePath}",
+                    "description": "diffレビュー用プロンプト文。{filePath}はファイルパスに置換されます。"
                 },
-                "codeDiffReviewer.reviewPromptNoDiff": {
+                "copilotReviewPromptEditor.reviewPromptNoDiff": {
                     "type": "string",
                     "format": "textarea",
-                    "default": "以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・明確なバグやエラーを最優先、多少の冗長さやコードの無駄は無視してください。",
+                    "default": "以下の条件でこのプロジェクトのコードをレビューしてください。\n・.cs,.js,.shader,.hlsl,.cgincファイルをすべてレビューしてください。\n・レビューは設計面を重視、明確なバグやエラーを優先して指摘、多少の冗長さやコードの無駄は無視してください。",
                     "description": "diffを使わない場合のレビュー用プロンプト文。"
                 }
             }
