@@ -1,9 +1,7 @@
 
 # Copilot Review Prompt Editor
-
-「Copilot Review Prompt Editor」は、Copilot Chat に貼り付けるコードレビュー用のプロンプトを編集し、クリップボードにコピーするVSCodeの拡張です
-指定したブランチと現在のブランチの差分をパッチファイルとして保存して、差分をレビューすることができます
-
+- 「Copilot Review Prompt Editor」は、Copilot Chat に貼り付けるコードレビュー用のプロンプトを編集し、クリップボードにコピーするVSCodeの拡張です
+- 指定したブランチと現在のブランチの差分をパッチファイルとして保存して、差分をレビューすることができます
 
 ## 主な機能
 - コマンドパレットから「Save Git Diff Files」を実行し、比較先ブランチ名と保存先フォルダを指定して差分ファイルを作成
